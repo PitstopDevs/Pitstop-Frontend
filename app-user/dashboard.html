@@ -1,24 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <title>AppUser Dashboard</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <div class="dashboard container">
-        <h2>Welcome, <span id="userName"></span></h2>
-        <div id="message-container" style="margin-top: 20px;"></div>
+    <div class="dashboard-wrapper">
 
-        <button>Add Address</button>
-        <button>Change Default Address</button>
-        <button>Profile Info</button>
-        <button>Booking History</button>
-        <button>Add Vehicle</button>
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h2>Welcome, <span id="userName">User</span></h2>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </header>
 
-        <button onclick="logout()">Logout</button>
+        <!-- Cards -->
+        <div class="dashboard-grid">
+
+            <div class="dashboard-card" id="addAddressCard" onclick="goToAddAddress()">
+                <i class="fa-solid fa-location-dot"></i>
+                <h3>Add Address</h3>
+                <p>Add a new address</p>
+            </div>
+
+            <div class="dashboard-card" id="defaultAddressCard">
+                <i class="fa-solid fa-star"></i>
+                <h3>Default Address</h3>
+                <p>Change default location</p>
+            </div>
+
+            <!-- PRIMARY ACTION -->
+            <div class="dashboard-card primary-card" id="requestBookingCard">
+                <i class="fa-solid fa-calendar-check"></i>
+                <h3>Request Booking</h3>
+                <p>Request a new booking</p>
+            </div>
+
+            <div class="dashboard-card" id="profileInfoCard">
+                <i class="fa-solid fa-user"></i>
+                <h3>Profile Info</h3>
+                <p>View your profile details</p>
+            </div>
+
+            <div class="dashboard-card" id="bookingHistoryCard">
+                <i class="fa-solid fa-book"></i>
+                <h3>Booking History</h3>
+                <p>View past bookings</p>
+            </div>
+
+            <div class="dashboard-card" id="addVehicleCard">
+                <i class="fa-solid fa-car"></i>
+                <h3>Add Vehicle</h3>
+                <p>Register a new vehicle</p>
+            </div>
+
+        </div>
+
     </div>
 
     <script src="js/dashboard.js"></script>
