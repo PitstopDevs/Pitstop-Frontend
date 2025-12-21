@@ -11,11 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", handleUseLocation);
   }
 
-  // ✅ load saved addresses on page load
+  // Load saved addresses on page load
   fetchSavedAddresses();
 });
 
-/* Entry point when user clicks button */
+/* ===================== ADD ADDRESS ===================== */
+
 function handleUseLocation() {
   if (!navigator.geolocation) {
     showMessage("Geolocation not supported by this browser", false);
@@ -34,7 +35,6 @@ function handleUseLocation() {
   );
 }
 
-/* Call backend to add address */
 function sendAddressToBackend(latitude, longitude) {
   fetch("http://localhost:8080/api/users/add-address", {
     method: "POST",
@@ -52,13 +52,9 @@ function sendAddressToBackend(latitude, longitude) {
       }
       return res.json();
     })
-    .then((data) => {
+    .then(() => {
       showMessage("Address added successfully", true);
-
-      // ✅ add only ONE new address to UI
-      if (data.formattedAddress) {
-        appendAddress(data.formattedAddress);
-      }
+      fetchSavedAddresses(); // refresh list
     })
     .catch((err) => {
       showMessage(err.message, false);
@@ -66,7 +62,8 @@ function sendAddressToBackend(latitude, longitude) {
     });
 }
 
-/* ✅ Fetch all saved addresses */
+/* ===================== FETCH ADDRESSES ===================== */
+
 function fetchSavedAddresses() {
   fetch("http://localhost:8080/api/users/savedAddress", {
     method: "GET",
@@ -88,9 +85,8 @@ function fetchSavedAddresses() {
     });
 }
 
-/* UI helpers */
+/* ===================== UI RENDERING ===================== */
 
-/* render FULL list (array) */
 function renderAddressList(addresses) {
   const list = document.getElementById("addressList");
 
@@ -103,26 +99,70 @@ function renderAddressList(addresses) {
 
   addresses.forEach((addr) => {
     const li = document.createElement("li");
-    li.textContent = addr.formattedAddress;
+    li.style.marginBottom = "8px";
+
+    const text = document.createElement("span");
+    text.textContent = addr.formattedAddress;
+    li.appendChild(text);
+
+    const btn = document.createElement("button");
+    btn.textContent = addr.isDefault ? "Default" : "Set as default";
+    btn.classList.add("set-default-btn");
+
+    // disable button if already default
+    if (addr.isDefault) {
+      btn.disabled = true;
+    } else {
+      btn.addEventListener("click", () => {
+        confirmSetDefault(addr.id); // ✅ PASS ID, NOT ADDRESS
+      });
+    }
+
+    li.appendChild(btn);
     list.appendChild(li);
   });
 }
 
-/* append SINGLE address */
-function appendAddress(address) {
-  const list = document.getElementById("addressList");
-  if (!list) return;
+/* ===================== DEFAULT ADDRESS ===================== */
 
-  // prevent duplicate UI entries
-  const exists = Array.from(list.children).some(
-    (li) => li.textContent === address
+function confirmSetDefault(id) {
+  const confirmed = window.confirm(
+    "Are you sure you want to set this address as default?"
   );
-  if (exists) return;
 
-  const li = document.createElement("li");
-  li.textContent = address;
-  list.appendChild(li);
+  if (!confirmed) return;
+
+  changeDefaultAddress(id); // ✅ ID ONLY
 }
+
+function changeDefaultAddress(id) {
+  fetch("http://localhost:8080/api/users/change-default-address", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    body: JSON.stringify({ id }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return res.text().then((msg) => {
+          throw new Error(msg || "Failed to change default address");
+        });
+      }
+      return res.text();
+    })
+    .then(() => {
+      showMessage("Default address saved", true);
+      fetchSavedAddresses(); // refresh from backend truth
+    })
+    .catch((err) => {
+      showMessage(err.message, false);
+      console.error(err);
+    });
+}
+
+/* ===================== COMMON ===================== */
 
 function showMessage(message, success) {
   const div = document.getElementById("message");
