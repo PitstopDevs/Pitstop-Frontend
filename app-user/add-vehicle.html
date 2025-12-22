@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Add Vehicle</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div class="dashboard-wrapper">
+
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h2>Add Vehicle</h2>
+            <a href="dashboard.html" class="back-btn">← Back</a>
+        </header>
+
+        <!-- Card -->
+        <div class="card">
+
+            <!-- Vehicle Type -->
+            <div class="form-group">
+                <label>Vehicle Type</label>
+                <select id="vehicleType">
+                    <option value="">Select Vehicle Type</option>
+                    <option value="TWO_WHEELER">Two Wheeler</option>
+                    <option value="FOUR_WHEELER">Four Wheeler</option>
+                </select>
+            </div>
+
+            <!-- Two Wheeler -->
+            <div id="twoWheelerForm" class="vehicle-form hidden">
+                <input type="text" id="twBrand" placeholder="Brand" />
+                <input type="text" id="twModel" placeholder="Model" />
+                <input type="number" id="twEngineCapacity" placeholder="Engine Capacity (cc)" />
+                <button class="primary-btn" onclick="submitTwoWheeler()">Add Two Wheeler</button>
+            </div>
+
+            <!-- Four Wheeler -->
+            <div id="fourWheelerForm" class="vehicle-form hidden">
+                <input type="text" id="fwBrand" placeholder="Brand" />
+                <input type="text" id="fwModel" placeholder="Model" />
+                <input type="number" id="fwEngineCapacity" placeholder="Engine Capacity (cc)" />
+                <button class="primary-btn" onclick="submitFourWheeler()">Add Four Wheeler</button>
+            </div>
+
+            <p id="message" class="message"></p>
+
+        </div>
+
+        <!-- Vehicle List -->
+        <div class="card">
+            <h3>Your Vehicles</h3>
+
+            <table class="styled-table" id="vehicleTable">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Engine Capacity</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="js/add-vehicle.js"></script>
+</body>
+
+</html>
