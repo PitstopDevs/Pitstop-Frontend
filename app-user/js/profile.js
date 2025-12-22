@@ -110,3 +110,42 @@ function saveEmail() {
       alert(err.message);
     });
 }
+function openChangePasswordModal() {
+  document.getElementById("passwordModal").classList.remove("hidden");
+}
+
+function closeChangePasswordModal() {
+  document.getElementById("passwordModal").classList.add("hidden");
+  document.getElementById("passwordMsg").textContent = "";
+  document.getElementById("newPassword").value = "";
+}
+
+function submitChangePassword() {
+  const currentPassword = document.getElementById("currentPassword").value;
+  const newPassword = document.getElementById("newPassword").value;
+
+  fetch("http://localhost:8080/api/users/me/change-password", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    body: JSON.stringify({
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    }),
+  })
+    .then((res) => res.text())
+    .then((msg) => {
+      alert(msg);
+    })
+    .catch(() => {
+      alert("Failed to change password");
+    });
+}
+
+function showPasswordMessage(msg, success) {
+  const p = document.getElementById("passwordMsg");
+  p.textContent = msg;
+  p.style.color = success ? "green" : "red";
+}

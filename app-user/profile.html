@@ -60,6 +60,32 @@
 
             <p id="message" class="message"></p>
         </div>
+        <div class="profile-actions">
+            <button class="danger-btn" onclick="openChangePasswordModal()">
+                <i class="fa-solid fa-key"></i> Change Password
+            </button>
+        </div>
+
+        <!-- Change Password Modal -->
+        <div id="passwordModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Change Password</h3>
+
+                <input type="password" id="currentPassword" placeholder="Current password" />
+
+                <input type="password" id="newPassword" placeholder="New password" />
+
+                <div class="modal-actions">
+                    <button onclick="submitChangePassword()">Save</button>
+                    <button class="secondary-btn" onclick="closeChangePasswordModal()">
+                        Cancel
+                    </button>
+                </div>
+
+                <p id="passwordMsg"></p>
+            </div>
+        </div>
+
     </div>
 
     <script src="js/profile.js"></script>
