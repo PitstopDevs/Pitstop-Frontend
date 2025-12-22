@@ -1,29 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8" />
     <title>Profile Info</title>
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
+    <div class="dashboard-wrapper">
 
-    <div class="container">
-        <h2>Profile Information</h2>
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h2>
+                <i class="fa-solid fa-user"></i>
+                Profile Information
+            </h2>
 
-        <div id="profile">
-            <p><strong>Name:</strong> <span id="name"></span></p>
-            <p><strong>Username:</strong> <span id="username"></span></p>
-            <p><strong>Email:</strong> <span id="email"></span></p>
+            <a href="dashboard.html" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+        </header>
+
+        <!-- Profile Card -->
+        <div class="profile-card">
+
+            <div class="profile-row">
+                <i class="fa-solid fa-id-card"></i>
+                <span class="label">Name</span>
+                <span class="value" id="name">—</span>
+                <button class="edit-btn" onclick="enableEdit()">Edit Name</button>
+            </div>
+
+            <div class="profile-row">
+                <i class="fa-solid fa-user"></i>
+                <span class="label">Username</span>
+                <span class="value" id="username">—</span>
+            </div>
+
+            <div class="profile-row">
+                <i class="fa-solid fa-envelope"></i>
+                <span class="label">Email</span>
+                <span class="value" id="email">—</span>
+                <button class="edit-btn" onclick="enableEmailEdit()">Edit Email</button>
+            </div>
+
+            <div class="profile-row">
+                <i class="fa-solid fa-star"></i>
+                <span class="label">Rating</span>
+                <span class="value">
+                    <span id="rating">N/A</span>
+                    <small id="ratingCount"></small>
+                </span>
+            </div>
+
+            <p id="message" class="message"></p>
         </div>
-        <p>
-            <strong>Rating:</strong>
-            <span id="rating">N/A</span>
-        </p>
-
-        <p id="message"></p>
-
-        <a href="dashboard.html">← Back to Dashboard</a>
     </div>
 
     <script src="js/profile.js"></script>

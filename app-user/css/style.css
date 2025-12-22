@@ -285,3 +285,61 @@
 .set-default-btn:active {
   transform: scale(0.95);
 }
+/* Back button */
+.back-btn {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+.back-btn i {
+  margin-right: 6px;
+}
+
+/* Profile Card */
+.profile-card {
+  background: #fff;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Profile rows */
+.profile-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  gap: 12px;
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+.profile-row i {
+  color: #555;
+  width: 20px;
+  text-align: center;
+}
+
+.profile-row .label {
+  flex: 1;
+  font-weight: 600;
+  color: #333;
+}
+
+.profile-row .value {
+  color: #555;
+  text-align: right;
+}
+
+/* Message */
+.message {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+  color: red;
+}
