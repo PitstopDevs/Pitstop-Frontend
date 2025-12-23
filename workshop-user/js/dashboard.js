@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  document.getElementById("username").innerText = username;
+  document.getElementById("workshopUsername").textContent = username;
 });
 
 function logout() {

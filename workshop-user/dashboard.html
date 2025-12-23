@@ -1,20 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8" />
     <title>Workshop Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/workshop.css">
+
+    <!-- Base + Workshop theme -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/workshop.css" />
 </head>
 
 <body>
 
     <div class="dashboard-wrapper">
+
+        <!-- Header -->
         <header class="dashboard-header">
-            <h2>Welcome, <span id="username"></span></h2>
-            <button class="danger-btn" onclick="logout()">Logout</button>
+            <h2>
+                Welcome, <span id="workshopUsername"></span>
+            </h2>
+
+            <button class="danger-btn" onclick="logout()">
+                Logout
+            </button>
         </header>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-grid">
+
+            <div class="dashboard-card" onclick="location.href='update-address.html'">
+                <h3>Update Address</h3>
+                <p>Manage workshop location</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Booking History</h3>
+                <p>View completed & past bookings</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Profile Info</h3>
+                <p>View and update workshop profile</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Add Vehicle Type</h3>
+                <p>Select supported vehicle types</p>
+            </div>
+            <div class="dashboard-card">
+                <h3>Add Service</h3>
+                <p>Add or update services offered</p>
+            </div>
+
+        </div>
+
     </div>
 
     <script src="js/dashboard.js"></script>
