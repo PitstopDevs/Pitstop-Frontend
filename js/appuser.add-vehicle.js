@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   if (!token) {
-    window.location.href = "index.html";
+    window.location.href = "appuser-index.html";
     return;
   }
 

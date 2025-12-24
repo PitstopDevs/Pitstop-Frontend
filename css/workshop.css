@@ -60,3 +60,18 @@ a:hover {
 .message {
   font-size: 13px;
 }
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 600;
+  color: #444;
+}

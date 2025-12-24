@@ -14,9 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function logout() {
   localStorage.clear();
-  window.location.href = "index.html";
+  window.location.href = "appuser-index.html";
 }
 
 function goToAddAddress() {
-  window.location.href = "add-address.html";
+  window.location.href = "appuser-add-address.html";
 }

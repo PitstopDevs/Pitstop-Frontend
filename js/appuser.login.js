@@ -26,7 +26,7 @@ function login() {
       const displayName = data.name || data.username || "User";
       localStorage.setItem("username", displayName);
 
-      window.location.href = "dashboard.html";
+      window.location.href = "appuser-dashboard.html";
     })
     .catch((err) => {
       showMessage(err.message, false);

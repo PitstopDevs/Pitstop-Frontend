@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("workshopToken");
 
   if (!token) {
-    window.location.href = "index.html";
+    window.location.href = "workshop-index.html";
     return;
   }
 

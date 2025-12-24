@@ -14,7 +14,7 @@ function login() {
     .then((data) => {
       localStorage.setItem("workshopToken", data.token);
       localStorage.setItem("workshopUsername", data.username);
-      window.location.href = "dashboard.html";
+      window.location.href = "workshop-dashboard.html";
     })
     .catch((err) => {
       document.getElementById("message").innerText = err.message;

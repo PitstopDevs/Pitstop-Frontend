@@ -15,7 +15,7 @@ function register() {
     })
     .then(() => {
       alert("Registration successful");
-      window.location.href = "index.html";
+      window.location.href = "workshop-index.html";
     })
     .catch((err) => alert(err.message));
 }

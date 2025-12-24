@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const username = localStorage.getItem("workshopUsername");
 
   if (!token || !username) {
-    window.location.href = "index.html";
+    window.location.href = "workshop-index.html";
     return;
   }
 
@@ -13,5 +13,5 @@ document.addEventListener("DOMContentLoaded", () => {
 function logout() {
   localStorage.removeItem("workshopToken");
   localStorage.removeItem("workshopUsername");
-  window.location.href = "index.html";
+  window.location.href = "workshop-index.html";
 }

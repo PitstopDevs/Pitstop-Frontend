@@ -16,7 +16,7 @@ function register() {
     .then((res) => res.json())
     .then((data) => {
       showMessage("Registration successful. Redirecting...", true);
-      setTimeout(() => (window.location.href = "index.html"), 1500);
+      setTimeout(() => (window.location.href = "appuser-index.html"), 1500);
     })
     .catch(() => showMessage("Registration failed", false));
 }
