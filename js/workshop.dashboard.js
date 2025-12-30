@@ -95,6 +95,9 @@ function showMessage(msg, success) {
   const p = document.getElementById("statusMessage");
   p.textContent = msg;
   p.style.color = success ? "green" : "red";
+  setTimeout(() => {
+    p.textContent = "";
+  }, 3000);
 }
 
 function clearMessage() {
