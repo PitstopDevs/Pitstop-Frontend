@@ -17,13 +17,27 @@
         <!-- Header -->
         <header class="dashboard-header">
             <h2>
-                Welcome, <span id="workshopUsername"></span>
+                <h2>Welcome, <span id="workshopUsername"></span></h2>
             </h2>
 
             <button class="danger-btn" onclick="logout()">
                 Logout
             </button>
         </header>
+        <!-- Status Card -->
+        <div class="card">
+            <h3>
+                Status:
+                <span id="workshopStatus">-</span>
+            </h3>
+
+            <label class="switch">
+                <input type="checkbox" id="statusToggle" />
+                <span class="slider"></span>
+            </label>
+
+            <p id="statusMessage" class="message"></p>
+        </div>
 
         <!-- Dashboard Cards -->
         <div class="dashboard-grid">
