@@ -22,24 +22,39 @@
         <!-- Profile Card -->
         <div class="card">
 
-            <div class="profile-row">
-                <span class="label">Name</span>
-                <span id="name">-</span>
-            </div>
-
+            <!-- Username (READ ONLY) -->
             <div class="profile-row">
                 <span class="label">Username</span>
-                <span id="username">-</span>
+                <input type="text" id="username" disabled />
             </div>
 
+            <!-- Name (EDITABLE) -->
+            <div class="profile-row">
+                <span class="label">Name</span>
+                <input type="text" id="name" disabled />
+            </div>
+
+            <!-- Email (EDITABLE) -->
             <div class="profile-row">
                 <span class="label">Email</span>
-                <span id="email">-</span>
+                <input type="email" id="email" disabled />
             </div>
 
+            <!-- Rating (READ ONLY) -->
             <div class="profile-row">
                 <span class="label">Ratings</span>
                 <span id="rating">-</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="profile-actions">
+                <button id="editBtn" class="primary-btn" onclick="enableEdit()">Edit</button>
+                <button id="saveBtn" class="success-btn" onclick="saveProfile()" style="display:none;">
+                    Save
+                </button>
+                <button id="cancelBtn" class="secondary-btn" onclick="cancelEdit()" style="display:none;">
+                    Cancel
+                </button>
             </div>
 
             <p id="message" class="message"></p>
