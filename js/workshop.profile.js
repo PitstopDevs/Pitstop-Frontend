@@ -136,3 +136,55 @@ function clearMessage() {
   const p = document.getElementById("message");
   if (p) p.textContent = "";
 }
+function togglePasswordForm() {
+  const form = document.getElementById("passwordForm");
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function changePassword() {
+  const currentPassword = document
+    .getElementById("currentPassword")
+    .value.trim();
+  const newPassword = document.getElementById("newPassword").value.trim();
+
+  if (!currentPassword || !newPassword) {
+    alert("Both fields are required");
+    return;
+  }
+
+  if (currentPassword === newPassword) {
+    alert("New password cannot be same as current password");
+    return;
+  }
+
+  fetch("http://localhost:8080/api/workshops/me/change-password", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+    },
+    body: JSON.stringify({
+      currentPassword,
+      newPassword,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return res.text().then((msg) => {
+          throw new Error(msg);
+        });
+      }
+      return res.text();
+    })
+    .then((msg) => {
+      alert(msg);
+
+      // 🔥 Force logout after password change
+      localStorage.removeItem("workshopToken");
+      localStorage.removeItem("workshopUsername");
+      window.location.href = "workshop-index.html";
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
+}

@@ -60,6 +60,28 @@
             <p id="message" class="message"></p>
 
         </div>
+        <button class="danger-btn" onclick="togglePasswordForm()">
+            Change Password
+        </button>
+
+        <div id="passwordForm" class="card" style="display:none; margin-top:20px;">
+            <h3>Change Password</h3>
+
+            <div class="profile-row">
+                <span class="label">Current Password</span>
+                <input type="password" id="currentPassword" />
+            </div>
+
+            <div class="profile-row">
+                <span class="label">New Password</span>
+                <input type="password" id="newPassword" />
+            </div>
+
+            <button class="success-btn" onclick="changePassword()">
+                Update Password
+            </button>
+        </div>
+
 
     </div>
 
