@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   loadProfile();
+  loadVehicleTypes();
 });
 
 /* ================= LOAD PROFILE ================= */
@@ -183,6 +184,95 @@ function changePassword() {
       localStorage.removeItem("workshopToken");
       localStorage.removeItem("workshopUsername");
       window.location.href = "workshop-index.html";
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
+}
+/* ================= LOAD VEHICLE TYPES ================= */
+
+function loadVehicleTypes() {
+  fetch("http://localhost:8080/api/workshops/me/vehicleTypes", {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to load vehicle types");
+      return res.json();
+    })
+    .then((data) => {
+      const textEl = document.getElementById("vehicleTypes");
+      const deleteBtn = document.getElementById("deleteVehicleTypeBtn");
+
+      // 🔑 extract RAW value only
+      let rawType = null;
+
+      if (typeof data === "string") {
+        rawType = data;
+      } else if (data && data.vehicleTypeSupported) {
+        rawType = data.vehicleTypeSupported;
+      }
+
+      // ❌ no vehicle type
+      if (!rawType) {
+        textEl.textContent = "Not available";
+        deleteBtn.style.display = "none";
+        return;
+      }
+
+      // ✅ vehicle type exists
+      textEl.textContent = formatVehicleType(rawType);
+      deleteBtn.style.display = "inline-block";
+    })
+    .catch((err) => {
+      console.error(err);
+      document.getElementById("vehicleTypes").textContent = "Not available";
+      document.getElementById("deleteVehicleTypeBtn").style.display = "none";
+    });
+}
+
+/* ================= FORMATTER ================= */
+
+function formatVehicleType(type) {
+  if (!type) return "-";
+
+  switch (type) {
+    case "TWO_WHEELER":
+      return "Two Wheeler";
+    case "FOUR_WHEELER":
+      return "Four Wheeler";
+    case "BOTH":
+      return "Two & Four Wheeler";
+    default:
+      return type;
+  }
+}
+function deleteVehicleType() {
+  const confirmed = confirm(
+    "Are you sure you want to remove the vehicle type?"
+  );
+
+  if (!confirmed) return;
+
+  fetch("http://localhost:8080/api/workshops/removeVehicle", {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return res.text().then((msg) => {
+          throw new Error(msg);
+        });
+      }
+      return res.text();
+    })
+    .then((msg) => {
+      alert(msg);
+      document.getElementById("vehicleTypes").textContent = "Not available";
+      document.getElementById("deleteVehicleTypeBtn").style.display = "none";
     })
     .catch((err) => {
       alert(err.message);

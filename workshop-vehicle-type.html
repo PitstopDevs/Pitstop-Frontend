@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Vehicle Type</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/workshop.css">
+</head>
+
+<body>
+
+    <div class="dashboard-wrapper">
+
+        <header class="dashboard-header">
+            <h2>Add Vehicle Type</h2>
+            <a href="workshop-dashboard.html" class="back-btn">← Back</a>
+        </header>
+
+        <div class="card">
+
+            <label class="label">Vehicle Type Supported</label>
+
+            <select id="vehicleType">
+                <option value="">Select vehicle type</option>
+                <option value="TWO_WHEELER">Two Wheeler</option>
+                <option value="FOUR_WHEELER">Four Wheeler</option>
+                <option value="BOTH">Both</option>
+            </select>
+
+            <button class="primary-btn" onclick="addVehicleType()">
+                Add
+            </button>
+
+            <p id="message" class="message"></p>
+        </div>
+
+    </div>
+
+    <script src="js/workshop.vehicle.type.js"></script>
+</body>
+
+</html>

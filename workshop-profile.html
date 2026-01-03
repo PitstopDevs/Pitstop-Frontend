@@ -58,6 +58,23 @@
             </div>
 
             <p id="message" class="message"></p>
+            <!-- Vehicle Types Supported -->
+            <div class="profile-row">
+                <span class="label">Vehicle Types Supported</span>
+
+                <span>
+                    <span id="vehicleTypes">-</span>
+
+                    <a href="workshop-vehicle-type.html" class="link-btn" style="margin-left:10px;">
+                        Manage
+                    </a>
+
+                    <button id="deleteVehicleTypeBtn" class="danger-btn small-btn"
+                        style="margin-left:10px; display:none;" onclick="deleteVehicleType()">
+                        Delete
+                    </button>
+                </span>
+            </div>
 
         </div>
         <button class="danger-btn" onclick="togglePasswordForm()">
@@ -80,6 +97,7 @@
             <button class="success-btn" onclick="changePassword()">
                 Update Password
             </button>
+
         </div>
 
 
