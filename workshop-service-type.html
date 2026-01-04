@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Service Types</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/workshop.css">
+</head>
+
+<body>
+
+    <div class="dashboard-wrapper">
+
+        <header class="dashboard-header">
+            <h2>Manage Service Types</h2>
+            <a href="workshop-profile.html" class="back-btn">← Back</a>
+        </header>
+
+        <div class="card">
+
+            <label class="label">Service Type</label>
+
+            <select id="serviceType">
+                <option value="">Select service type</option>
+                <option value="ENGINE_REPAIR">Engine Repair</option>
+                <option value="OIL_CHANGE">Oil Change</option>
+                <option value="BATTERY_REPLACEMENT">Battery Replacement</option>
+                <option value="TYRE_REPLACEMENT">Tyre Replacement</option>
+                <option value="BRAKE_SERVICE">Brake Service</option>
+                <option value="AC_REPAIR">AC Repair</option>
+                <option value="GENERAL_SERVICE">General Service</option>
+            </select>
+
+            <div class="btn-row">
+                <button class="primary-btn" onclick="addServiceType()">
+                    Add
+                </button>
+
+                <button class="danger-btn" onclick="deleteServiceType()">
+                    Delete
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/workshop.service.type.js"></script>
+</body>
+
+</html>

@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadProfile();
   loadVehicleTypes();
+  loadServicesOffered();
 });
 
 /* ================= LOAD PROFILE ================= */
@@ -277,4 +278,54 @@ function deleteVehicleType() {
     .catch((err) => {
       alert(err.message);
     });
+}
+function loadServicesOffered() {
+  fetch("http://localhost:8080/api/workshops/me/services", {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed to load services");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      const list = document.getElementById("servicesList");
+      list.innerHTML = "";
+
+      let services = [];
+
+      // Handle multiple response shapes
+      if (Array.isArray(data)) {
+        services = data;
+      } else if (data.servicesOffered) {
+        services = data.servicesOffered;
+      }
+
+      if (!services || services.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "Not available";
+        list.appendChild(li);
+        return;
+      }
+
+      services.forEach((service) => {
+        const li = document.createElement("li");
+        li.textContent = formatServiceType(service);
+        list.appendChild(li);
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      const list = document.getElementById("servicesList");
+      list.innerHTML = "<li>Not available</li>";
+    });
+}
+function formatServiceType(type) {
+  return type
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
