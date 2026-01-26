@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("workshopToken");
-
+  fetchCurrentAddress();
   if (!token) {
     window.location.href = "index.html";
     return;
@@ -21,7 +21,7 @@ function useCurrentLocation() {
     },
     () => {
       showMessage("Location permission denied", false);
-    }
+    },
   );
 }
 
@@ -84,14 +84,22 @@ function fetchCurrentAddress() {
     },
   })
     .then((res) => {
-      if (!res.ok) return null;
+      if (!res.ok) {
+        throw new Error("Failed to fetch address");
+      }
       return res.json();
     })
     .then((data) => {
-      if (data && data.formattedAddress) {
-        document.getElementById("currentAddress").textContent =
-          data.formattedAddress;
+      const el = document.getElementById("currentAddress");
+
+      if (!data || !data.hasAddress || !data.address) {
+        el.textContent = "No address added yet";
+        return;
       }
+
+      el.textContent = data.address.formattedAddress;
     })
-    .catch(() => {});
+    .catch((err) => {
+      console.error("Fetch address error:", err);
+    });
 }
