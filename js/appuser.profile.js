@@ -131,16 +131,28 @@ function submitChangePassword() {
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
     body: JSON.stringify({
-      currentPassword: currentPassword,
-      newPassword: newPassword,
+      currentPassword,
+      newPassword,
     }),
   })
-    .then((res) => res.text())
-    .then((msg) => {
-      alert(msg);
+    .then(async (res) => {
+      const data = await res.json();
+
+      if (!res.ok) {
+        // backend validation error (400/401/etc)
+        throw new Error(data.message || "Something went wrong");
+      }
+
+      return data;
     })
-    .catch(() => {
-      alert("Failed to change password");
+    .then(() => {
+      alert("Password changed successfully");
+      // OPTIONAL but recommended:
+      // localStorage.removeItem("token");
+      // window.location.href = "/login";
+    })
+    .catch((err) => {
+      alert(err.message);
     });
 }
 

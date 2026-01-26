@@ -31,7 +31,7 @@ function handleUseLocation() {
     (error) => {
       showMessage("Location permission denied", false);
       console.error("Geolocation error:", error);
-    }
+    },
   );
 }
 
@@ -90,10 +90,7 @@ function fetchSavedAddresses() {
 function renderAddressList(addresses) {
   const list = document.getElementById("addressList");
 
-  if (!list) {
-    console.error("addressList element not found");
-    return;
-  }
+  if (!list) return;
 
   list.innerHTML = "";
 
@@ -105,60 +102,64 @@ function renderAddressList(addresses) {
     text.textContent = addr.formattedAddress;
     li.appendChild(text);
 
-    const btn = document.createElement("button");
-    btn.textContent = addr.isDefault ? "Default" : "Set as default";
-    btn.classList.add("set-default-btn");
-
-    // disable button if already default
-    if (addr.isDefault) {
-      btn.disabled = true;
+    // 🔥 DEFAULT badge OR button
+    if (addr.default === true) {
+      const badge = document.createElement("span");
+      badge.textContent = " Default";
+      badge.style.color = "green";
+      badge.style.marginLeft = "8px";
+      badge.style.fontWeight = "bold";
+      li.appendChild(badge);
     } else {
+      const btn = document.createElement("button");
+      btn.textContent = "Set as default";
+      btn.classList.add("set-default-btn");
+
       btn.addEventListener("click", () => {
-        confirmSetDefault(addr.id); // ✅ PASS ID, NOT ADDRESS
+        confirmSetDefault(addr.id);
       });
+
+      li.appendChild(btn);
     }
 
-    li.appendChild(btn);
     list.appendChild(li);
   });
 }
-
-/* ===================== DEFAULT ADDRESS ===================== */
-
-function confirmSetDefault(id) {
+function confirmSetDefault(addressId) {
   const confirmed = window.confirm(
-    "Are you sure you want to set this address as default?"
+    "Are you sure you want to set this address as default?",
   );
 
   if (!confirmed) return;
 
-  changeDefaultAddress(id); // ✅ ID ONLY
+  changeDefaultAddress(addressId);
 }
 
-function changeDefaultAddress(id) {
+function changeDefaultAddress(addressId) {
   fetch("http://localhost:8080/api/users/change-default-address", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
-    body: JSON.stringify({ id }),
+    body: JSON.stringify({ id: addressId }),
   })
     .then((res) => {
       if (!res.ok) {
-        return res.text().then((msg) => {
-          throw new Error(msg || "Failed to change default address");
+        return res.json().then((err) => {
+          throw new Error(err.error || "Failed to change default address");
         });
       }
       return res.text();
     })
     .then(() => {
-      showMessage("Default address saved", true);
-      fetchSavedAddresses(); // refresh from backend truth
+      showMessage("Default address updated", true);
+
+      // 🔥 THIS IS THE FIX
+      fetchSavedAddresses();
     })
     .catch((err) => {
       showMessage(err.message, false);
-      console.error(err);
     });
 }
 
