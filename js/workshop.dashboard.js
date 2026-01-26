@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  const username = getUsernameFromToken();
+  setWorkshopUsername(username);
+
   loadWorkshopStatus();
 
   document
@@ -88,6 +91,18 @@ function setWorkshopUsername(username) {
   const el = document.getElementById("workshopUsername");
   if (el && username) {
     el.textContent = username;
+  }
+}
+
+function getUsernameFromToken() {
+  const token = localStorage.getItem("workshopToken");
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.sub || payload.username || null;
+  } catch (e) {
+    return null;
   }
 }
 
