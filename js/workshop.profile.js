@@ -3,6 +3,10 @@ let originalEmail = "";
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("workshopToken");
+  const deleteBtn = document.getElementById("deleteVehicleTypeBtn");
+  deleteBtn.addEventListener("click", () => {
+    deleteVehicleType(deleteBtn.dataset.vehicleType);
+  });
 
   if (!token) {
     window.location.href = "index.html";
@@ -249,9 +253,9 @@ function formatVehicleType(type) {
       return type;
   }
 }
-function deleteVehicleType() {
+function deleteVehicleType(workshopVehicleType) {
   const confirmed = confirm(
-    "Are you sure you want to remove the vehicle type?"
+    "Are you sure you want to remove supported vehicle types?",
   );
 
   if (!confirmed) return;
@@ -262,21 +266,16 @@ function deleteVehicleType() {
       Authorization: "Bearer " + localStorage.getItem("workshopToken"),
     },
   })
-    .then((res) => {
-      if (!res.ok) {
-        return res.text().then((msg) => {
-          throw new Error(msg);
-        });
-      }
-      return res.text();
-    })
-    .then((msg) => {
-      alert(msg);
+    .then((res) => res.json())
+    .then((data) => {
+      alert(data.message);
+
+      // Update UI immediately
       document.getElementById("vehicleTypes").textContent = "Not available";
-      document.getElementById("deleteVehicleTypeBtn").style.display = "none";
     })
     .catch((err) => {
-      alert(err.message);
+      console.error(err);
+      alert("Failed to remove vehicle types");
     });
 }
 function loadServicesOffered() {
