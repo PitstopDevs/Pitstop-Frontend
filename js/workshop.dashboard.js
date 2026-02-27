@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const username = getUsernameFromToken();
+  const username = localStorage.getItem("workshopUsername") || "User";
   setWorkshopUsername(username);
 
   loadWorkshopStatus();
