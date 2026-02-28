@@ -24,3 +24,6 @@ function logout() {
 function goToAddAddress() {
   window.location.href = "appuser-add-address.html";
 }
+function goToRequestBooking() {
+  window.location.href = "appuser-request-booking.html";
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Request Booking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/appuser-request-booking.css">
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <div class="form-container">
+        <div class="top-nav">
+            <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+        </div>
+
+        <h2>Request Booking</h2>
+
+
+        <!-- Vehicle Dropdown -->
+        <label>Select Vehicle</label>
+        <select id="vehicleDropdown">
+            <option value="">Loading vehicles...</option>
+        </select>
+
+        <br><br>
+
+        <!-- Service Dropdown -->
+        <label>Select Service</label>
+        <select id="serviceDropdown">
+            <option value="">Select vehicle first</option>
+        </select>
+
+        <br><br>
+
+        <!-- Buttons -->
+        <button onclick="requestBooking()">Request Booking</button>
+        <button onclick="addVehicle()">Add Vehicle</button>
+
+    </div>
+
+    <script src="js/appuser.requestbooking.js"></script>
+
+</body>
+
+</html>
