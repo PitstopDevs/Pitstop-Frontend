@@ -86,3 +86,12 @@ button:last-of-type:hover {
 .back-btn:hover {
   text-decoration: underline;
 }
+
+.price-box {
+  margin-top: 15px;
+  padding: 12px;
+  background: #f0f7ff;
+  border-left: 4px solid #2196f3;
+  border-radius: 6px;
+  text-align: left;
+}

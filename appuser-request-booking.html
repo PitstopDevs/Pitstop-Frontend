@@ -32,8 +32,17 @@
         <select id="serviceDropdown">
             <option value="">Select vehicle first</option>
         </select>
+        <label>Select Workshop</label>
+        <select id="workshopDropdown">
+            <option value="">Select vehicle & service first</option>
+        </select>
 
         <br><br>
+        <div id="priceSection" class="price-box" style="display:none;">
+            <h4>Estimated Price</h4>
+            <p>Base Amount: ₹ <span id="baseAmount"></span></p>
+            <p>Premium Amount: ₹ <span id="premiumAmount"></span></p>
+        </div>
 
         <!-- Buttons -->
         <button onclick="requestBooking()">Request Booking</button>

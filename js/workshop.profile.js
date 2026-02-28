@@ -2,7 +2,7 @@ let originalName = "";
 let originalEmail = "";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("workshopToken");
+  const token = localStorage.getItem("token");
   const deleteBtn = document.getElementById("deleteVehicleTypeBtn");
   deleteBtn.addEventListener("click", () => {
     deleteVehicleType(deleteBtn.dataset.vehicleType);
@@ -24,7 +24,7 @@ function loadProfile() {
   fetch("http://localhost:8080/api/workshops/profile", {
     method: "GET",
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((res) => {
@@ -86,7 +86,7 @@ function saveProfile() {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
     body: JSON.stringify({ name, email }),
   })
@@ -167,7 +167,7 @@ function changePassword() {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
     body: JSON.stringify({
       currentPassword,
@@ -186,7 +186,7 @@ function changePassword() {
       alert(msg);
 
       // 🔥 Force logout after password change
-      localStorage.removeItem("workshopToken");
+      localStorage.removeItem("token");
       localStorage.removeItem("workshopUsername");
       window.location.href = "workshop-index.html";
     })
@@ -199,7 +199,7 @@ function changePassword() {
 function loadVehicleTypes() {
   fetch("http://localhost:8080/api/workshops/me/vehicleTypes", {
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((res) => {
@@ -263,7 +263,7 @@ function deleteVehicleType(workshopVehicleType) {
   fetch("http://localhost:8080/api/workshops/removeVehicle", {
     method: "DELETE",
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((res) => res.json())
@@ -281,7 +281,7 @@ function deleteVehicleType(workshopVehicleType) {
 function loadServicesOffered() {
   fetch("http://localhost:8080/api/workshops/me/services", {
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((res) => {

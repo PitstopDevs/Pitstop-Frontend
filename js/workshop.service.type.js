@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("workshopToken");
+  const token = localStorage.getItem("token");
 
   if (!token) {
     window.location.href = "index.html";
@@ -19,7 +19,7 @@ function addServiceType() {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
     body: JSON.stringify({
       workshopServiceType: serviceType,
@@ -57,7 +57,7 @@ function deleteServiceType() {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
     body: JSON.stringify({
       workshopServiceType: serviceType,

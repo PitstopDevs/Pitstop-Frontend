@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("workshopToken");
+  const token = localStorage.getItem("token");
   fetchCurrentAddress();
   if (!token) {
     window.location.href = "index.html";
@@ -32,7 +32,7 @@ function sendAddressToBackend(latitude, longitude) {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
     body: JSON.stringify({
       latitude,
@@ -67,7 +67,7 @@ function showMessage(msg, success) {
   p.style.color = success ? "green" : "red";
 }
 document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("workshopToken");
+  const token = localStorage.getItem("token");
 
   if (!token) {
     window.location.href = "workshop-index.html";
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function fetchCurrentAddress() {
   fetch("http://localhost:8080/api/workshops/getAddress", {
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((res) => {

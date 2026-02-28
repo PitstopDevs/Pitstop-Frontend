@@ -75,3 +75,29 @@ a:hover {
   font-weight: 600;
   color: #444;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.dark-toggle {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode .card,
+body.dark-mode .dashboard-card {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+body.dark-mode button {
+  background-color: #333;
+  color: white;
+}

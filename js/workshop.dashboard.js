@@ -95,3 +95,7 @@ function updateStatusUI(status) {
     toggle.checked = false;
   }
 }
+function logout() {
+  localStorage.clear();
+  window.location.href = "workshop-index.html";
+}

@@ -7,6 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("vehicleDropdown")
     .addEventListener("change", loadServicesForVehicle);
+  document
+    .getElementById("serviceDropdown")
+    .addEventListener("change", fetchPrice);
+  document.getElementById("serviceDropdown").addEventListener("change", () => {
+    fetchPrice();
+    loadWorkshops();
+  });
 });
 async function loadVehicles() {
   const dropdown = document.getElementById("vehicleDropdown");
@@ -79,7 +86,7 @@ function requestBooking() {
 }
 
 function addVehicle() {
-  alert("Add Vehicle clicked");
+  window.location.href = "appuser-add-vehicle.html";
 }
 function formatServiceName(service) {
   return service
@@ -89,4 +96,76 @@ function formatServiceName(service) {
 }
 function goBack() {
   window.location.href = "appuser-dashboard.html";
+}
+async function fetchPrice() {
+  const vehicleId = document.getElementById("vehicleDropdown").value;
+  const serviceType = document.getElementById("serviceDropdown").value;
+
+  if (!vehicleId || !serviceType) return;
+
+  const vehicleType = vehicleMap[vehicleId];
+
+  try {
+    const response = await fetch("http://localhost:8080/api/users/getPrice", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        vehicleType: vehicleType,
+        serviceType: serviceType,
+      }),
+    });
+
+    const price = await response.json();
+
+    document.getElementById("priceSection").style.display = "block";
+    document.getElementById("baseAmount").innerText = price.baseAmount;
+    document.getElementById("premiumAmount").innerText = price.premiumAmount;
+  } catch (err) {
+    console.log("Price fetch failed");
+  }
+}
+async function loadWorkshops() {
+  const vehicleId = document.getElementById("vehicleDropdown").value;
+  const serviceType = document.getElementById("serviceDropdown").value;
+
+  if (!vehicleId || !serviceType) return;
+
+  const vehicleType = vehicleMap[vehicleId];
+
+  const dropdown = document.getElementById("workshopDropdown");
+  dropdown.innerHTML = "<option>Loading...</option>";
+
+  try {
+    const response = await fetch(
+      "http://localhost:8080/api/workshops/filterWorkshops",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          vehicleType: vehicleType,
+          serviceType: serviceType,
+        }),
+      },
+    );
+
+    const workshops = await response.json();
+
+    dropdown.innerHTML = `<option value="">Select Workshop</option>`;
+
+    workshops.forEach((w) => {
+      const option = document.createElement("option");
+      option.value = w.id;
+      option.text = w.workshopName;
+
+      dropdown.appendChild(option);
+    });
+  } catch (err) {
+    console.log("Workshop load failed");
+  }
 }
