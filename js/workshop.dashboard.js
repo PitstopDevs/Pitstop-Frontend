@@ -1,28 +1,43 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("workshopToken");
+document.addEventListener("DOMContentLoaded", function () {
+  const token = localStorage.getItem("token");
 
+  // HARD GUARD
   if (!token) {
     window.location.href = "index.html";
     return;
   }
 
-  const username = localStorage.getItem("workshopUsername") || "User";
-  setWorkshopUsername(username);
+  let username = localStorage.getItem("username");
+
+  if (username) {
+    // Remove prefixes if any
+    username = username.replace("workshop_", "").replace("appuser_", "");
+
+    // Capitalize
+    username = username.charAt(0).toUpperCase() + username.slice(1);
+
+    const nameElement = document.getElementById("workshopUsername");
+
+    if (nameElement) {
+      nameElement.innerText = username;
+    } else {
+      console.log("Element workshopUsername not found");
+    }
+  }
 
   loadWorkshopStatus();
 
-  document
-    .getElementById("statusToggle")
-    .addEventListener("change", toggleWorkshopStatus);
+  const toggle = document.getElementById("statusToggle");
+  if (toggle) {
+    toggle.addEventListener("change", toggleWorkshopStatus);
+  }
 });
-
-/* ================= LOAD CURRENT STATUS ================= */
-
 function loadWorkshopStatus() {
   fetch("http://localhost:8080/api/workshops/getCurrentStatus", {
     method: "GET",
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((res) => {
@@ -32,30 +47,24 @@ function loadWorkshopStatus() {
       return res.json();
     })
     .then((data) => {
-      // backend fields
       updateStatusUI(data.workshopStatus);
-      setWorkshopUsername(data.username);
-      clearMessage();
     })
     .catch((err) => {
       console.error(err);
-      showMessage("Failed to load workshop status", false);
     });
 }
-
-/* ================= TOGGLE STATUS ================= */
-
 function toggleWorkshopStatus(e) {
   const isOn = e.target.checked;
 
   const endpoint = isOn
-    ? "/api/workshops/setWorkshopStatus" // OPEN
-    : "/api/workshops/setCloseWorkshop"; // CLOSE
+    ? "/api/workshops/setWorkshopStatus"
+    : "/api/workshops/setCloseWorkshop";
 
   fetch("http://localhost:8080" + endpoint, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("workshopToken"),
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
   })
     .then((res) => {
@@ -66,64 +75,23 @@ function toggleWorkshopStatus(e) {
     })
     .then((data) => {
       updateStatusUI(data.workshopStatus);
-      showMessage("Workshop status updated", true);
     })
     .catch((err) => {
-      // rollback toggle if API fails
       e.target.checked = !isOn;
-      showMessage(err.message, false);
+      console.error(err);
     });
 }
-
-/* ================= UI HELPERS ================= */
-
 function updateStatusUI(status) {
-  if (!status) return;
-
   const statusText = document.getElementById("workshopStatus");
   const toggle = document.getElementById("statusToggle");
 
-  statusText.textContent = status;
-  toggle.checked = status === "OPEN";
-}
+  if (!statusText || !toggle) return;
 
-function setWorkshopUsername(username) {
-  const el = document.getElementById("workshopUsername");
-  if (el && username) {
-    el.textContent = username;
+  statusText.innerText = status;
+
+  if (status === "OPEN") {
+    toggle.checked = true;
+  } else {
+    toggle.checked = false;
   }
-}
-
-function getUsernameFromToken() {
-  const token = localStorage.getItem("workshopToken");
-  if (!token) return null;
-
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.sub || payload.username || null;
-  } catch (e) {
-    return null;
-  }
-}
-
-function showMessage(msg, success) {
-  const p = document.getElementById("statusMessage");
-  p.textContent = msg;
-  p.style.color = success ? "green" : "red";
-  setTimeout(() => {
-    p.textContent = "";
-  }, 3000);
-}
-
-function clearMessage() {
-  const p = document.getElementById("statusMessage");
-  if (p) p.textContent = "";
-}
-
-/* ================= LOGOUT ================= */
-
-function logout() {
-  localStorage.removeItem("workshopToken");
-  localStorage.removeItem("workshopUsername");
-  window.location.href = "index.html";
 }

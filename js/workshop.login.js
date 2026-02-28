@@ -12,8 +12,10 @@ function login() {
       return res.json();
     })
     .then((data) => {
-      localStorage.setItem("workshopToken", data.token);
-      localStorage.setItem("workshopUsername", data.username);
+      // 🔥 SAME keys as appuser login
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.username);
+
       window.location.href = "workshop-dashboard.html";
     })
     .catch((err) => {
