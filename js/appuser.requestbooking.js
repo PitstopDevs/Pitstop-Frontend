@@ -88,8 +88,56 @@ async function loadServicesForVehicle() {
     console.log("Service load failed");
   }
 }
-function requestBooking() {
-  alert("Request Booking clicked");
+async function requestBooking() {
+  const vehicleId = document.getElementById("vehicleDropdown").value;
+  const serviceType = document.getElementById("serviceDropdown").value;
+  const workshopId = document.getElementById("workshopDropdown").value;
+
+  if (!vehicleId || !serviceType || !workshopId) {
+    alert("Please select Vehicle, Service and Workshop");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  const appUserId = payload.sub;
+
+  const requestBody = {
+    appUserId: appUserId,
+    workShopUserId: workshopId,
+    serviceType: serviceType,
+    vehicleId: vehicleId,
+  };
+
+  try {
+    const response = await fetch("http://localhost:8080/api/booking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const text = await response.text();
+
+    let data;
+
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { message: text };
+    }
+
+    if (!response.ok) {
+      throw new Error(data.message || "Booking failed");
+    }
+
+    alert("Request Booking Success!\nBooking ID: " + data.bookingId);
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Failed to request booking");
+  }
 }
 
 function addVehicle() {
