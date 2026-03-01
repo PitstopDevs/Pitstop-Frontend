@@ -7,13 +7,20 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("vehicleDropdown")
     .addEventListener("change", loadServicesForVehicle);
+
   document
     .getElementById("serviceDropdown")
+    .addEventListener("change", async () => {
+      // Step 1 → Load workshops
+      await loadWorkshops();
+
+      // Step 2 → Call price WITHOUT workshopId
+      fetchPrice();
+    });
+
+  document
+    .getElementById("workshopDropdown")
     .addEventListener("change", fetchPrice);
-  document.getElementById("serviceDropdown").addEventListener("change", () => {
-    fetchPrice();
-    loadWorkshops();
-  });
 });
 async function loadVehicles() {
   const dropdown = document.getElementById("vehicleDropdown");
@@ -100,10 +107,21 @@ function goBack() {
 async function fetchPrice() {
   const vehicleId = document.getElementById("vehicleDropdown").value;
   const serviceType = document.getElementById("serviceDropdown").value;
+  const workshopId = document.getElementById("workshopDropdown").value;
 
   if (!vehicleId || !serviceType) return;
 
   const vehicleType = vehicleMap[vehicleId];
+
+  const requestBody = {
+    vehicleType: vehicleType,
+    serviceType: serviceType,
+  };
+
+  // Add workshopId only if selected
+  if (workshopId && workshopId !== "" && workshopId !== "undefined") {
+    requestBody.workshopId = workshopId;
+  }
 
   try {
     const response = await fetch("http://localhost:8080/api/users/getPrice", {
@@ -112,20 +130,16 @@ async function fetchPrice() {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
-      body: JSON.stringify({
-        vehicleType: vehicleType,
-        serviceType: serviceType,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     const price = await response.json();
 
-    document.getElementById("priceSection").style.display = "block";
-    document.getElementById("baseAmount").innerText = price.baseAmount;
-    document.getElementById("premiumAmount").innerText = price.premiumAmount;
+    updatePriceUI(price, workshopId);
   } catch (err) {
     console.log("Price fetch failed");
   }
+  console.log("WorkshopId:", workshopId);
 }
 async function loadWorkshops() {
   const vehicleId = document.getElementById("vehicleDropdown").value;
@@ -155,17 +169,43 @@ async function loadWorkshops() {
     );
 
     const workshops = await response.json();
-
     dropdown.innerHTML = `<option value="">Select Workshop</option>`;
 
     workshops.forEach((w) => {
       const option = document.createElement("option");
-      option.value = w.id;
-      option.text = w.workshopName;
+      option.value = w.workshopId;
+      option.text = w.premiumWorkshop ? `${w.workshopName} ⭐` : w.workshopName;
+
+      option.dataset.premium = w.premiumWorkshop;
 
       dropdown.appendChild(option);
     });
   } catch (err) {
     console.log("Workshop load failed");
   }
+}
+function updatePriceUI(price, workshopId) {
+  document.getElementById("priceSection").style.display = "block";
+
+  const title = document.getElementById("priceTitle");
+
+  // Estimated vs Final Title
+  if (!workshopId) {
+    title.innerText = "Estimated Price";
+  } else {
+    title.innerText = "Final Price";
+  }
+
+  // Base price always shown
+  document.getElementById("baseAmount").innerText = price.baseAmount;
+
+  // Premium price
+  if (price.premiumApplied) {
+    document.getElementById("premiumAmount").innerText = price.premiumAmount;
+  } else {
+    document.getElementById("premiumAmount").innerText = 0;
+  }
+
+  // Final price
+  document.getElementById("finalAmount").innerText = price.finalAmount;
 }

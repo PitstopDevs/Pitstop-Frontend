@@ -95,3 +95,7 @@ button:last-of-type:hover {
   border-radius: 6px;
   text-align: left;
 }
+.premium-label {
+  color: #ff9800;
+  font-weight: bold;
+}
