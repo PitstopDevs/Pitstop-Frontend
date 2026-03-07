@@ -71,8 +71,9 @@ function renderBooking(booking) {
   document.getElementById("cbVehicle").innerText =
     (vehicle.brand || "") + " " + (vehicle.model || "");
 
-  document.getElementById("cbVehicleType").innerText =
-    vehicle.vehicleType || "--";
+  document.getElementById("cbVehicleType").innerText = vehicle.vehicleType
+    ? formatVehicleType(vehicle.vehicleType)
+    : "--";
 
   document.getElementById("cbEngine").innerText = vehicle.engineCapacity
     ? vehicle.engineCapacity + " CC"
@@ -123,4 +124,10 @@ function updateBookingCounter() {
 
   counter.innerText =
     "Booking " + (currentBookingIndex + 1) + " of " + activeBookings.length;
+}
+function formatVehicleType(type) {
+  return type
+    .toLowerCase()
+    .replace("_", " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
