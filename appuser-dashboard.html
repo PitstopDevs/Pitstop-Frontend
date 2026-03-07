@@ -12,16 +12,75 @@
 </head>
 
 <body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <h2>Welcome, <span id="userName">User</span></h2>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+    </header>
+    <div class="active-booking-wrapper">
+
+        <button id="prevBooking" class="booking-nav">&#10094;</button>
+
+        <div class="booking-slider">
+
+            <div id="currentBookingCard" class="active-booking-card">
+
+                <div class="booking-card-header">
+                    <h3>Active Bookings</h3>
+                    <span id="cbStatus" class="booking-status"></span>
+                </div>
+
+                <div class="booking-details">
+
+                    <div class="booking-row">
+                        <span class="label">Vehicle</span>
+                        <span id="cbVehicle"></span>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Vehicle Type</span>
+                        <span id="cbVehicleType"></span>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Engine Capacity</span>
+                        <span id="cbEngine"></span>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Started</span>
+                        <span id="cbStarted"></span>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Amount</span>
+                        <span>₹ <span id="cbAmount"></span></span>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Payment</span>
+                        <span id="cbPayment"></span>
+                    </div>
+
+                </div>
+
+                <div class="booking-footer">
+                    <span id="bookingCounter"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <button id="nextBooking" class="booking-nav">&#10095;</button>
+
+    </div>
 
     <div class="dashboard-wrapper">
 
-        <!-- Header -->
-        <header class="dashboard-header">
-            <h2>Welcome, <span id="userName">User</span></h2>
-            <button class="logout-btn" onclick="logout()">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </button>
-        </header>
+
 
         <!-- Cards -->
         <div class="dashboard-grid">

@@ -49,7 +49,9 @@
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .dashboard-card:hover {
@@ -551,7 +553,9 @@ input {
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .dashboard-card:hover {
@@ -1061,4 +1065,129 @@ input:checked + .slider:before {
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 14px;
+}
+.active-booking-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 40px;
+}
+
+.booking-nav {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: #f2f2f2;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.booking-nav:hover {
+  background: #e6e6e6;
+}
+
+.booking-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.booking-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0;
+}
+
+.label {
+  color: #666;
+}
+.booking-slider {
+  overflow: hidden;
+  width: 440px;
+  display: flex;
+  justify-content: center;
+}
+
+.booking-nav {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.booking-footer {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: #777;
+}
+.active-booking-card {
+  width: 480px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px 24px;
+  border: 1px solid #e8e8e8;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.active-booking-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.15);
+}
+.booking-status {
+  padding: 20px 5px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Active */
+
+.status-STARTED {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+.status-BOOKED {
+  background: #fef3c7;
+  color: #92400e;
+}
+.status-ON_THE_WAY {
+  background: #e9d5ff;
+  color: #6b21a8;
+}
+.status-WAITING {
+  background: #fde68a;
+  color: #78350f;
+}
+.status-REPAIRING {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Inactive */
+
+.status-COMPLETED,
+.status-REJECTED,
+.status-TIMED_OUT,
+.status-CANCELLED_BY_APPUSER,
+.status-CANCELLED_BY_WORKSHOPUSER,
+.status-INCOMPLETE {
+  background: #e5e7eb;
+  color: #374151;
 }

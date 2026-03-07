@@ -134,6 +134,7 @@ async function requestBooking() {
     }
 
     alert("Request Booking Success!\nBooking ID: " + data.bookingId);
+    localStorage.setItem("currentBookingId", data.bookingId);
   } catch (err) {
     console.error(err);
     alert(err.message || "Failed to request booking");
