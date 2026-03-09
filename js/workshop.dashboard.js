@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (toggle) {
     toggle.addEventListener("change", toggleWorkshopStatus);
   }
+  loadWorkshopBookings();
 });
 function loadWorkshopStatus() {
   fetch("http://localhost:8080/api/workshops/getCurrentStatus", {
@@ -98,4 +99,57 @@ function updateStatusUI(status) {
 function logout() {
   localStorage.clear();
   window.location.href = "workshop-index.html";
+}
+async function loadWorkshopBookings() {
+  try {
+    const response = await fetch("http://localhost:8080/api/booking/check", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+
+    if (!response.ok) return;
+
+    const bookings = await response.json();
+
+    renderBookingTable(bookings);
+  } catch (err) {
+    console.log("Failed to load workshop bookings");
+  }
+}
+function renderBookingTable(bookings) {
+  const tbody = document.getElementById("bookingTableBody");
+
+  tbody.innerHTML = "";
+
+  bookings.forEach((booking, index) => {
+    const vehicle = booking.vehicleDetails || {};
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${booking.id}</td>
+      <td>${booking.customerName || "--"}</td>
+      <td>${formatEnum(vehicle.vehicleType)}</td>
+      <td>${vehicle.model || "--"}</td>
+      <td>${formatEnum(booking.serviceType)}</td>
+      <td>${formatEnum(booking.currentStatus)}</td>
+      <td>
+        <button class="view-btn" onclick="viewBooking('${booking.id}')">
+          View
+        </button>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+function formatEnum(value) {
+  if (!value) return "--";
+
+  return value
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }

@@ -36,7 +36,40 @@
 
             <p id="statusMessage" class="message"></p>
         </div>
+        <div class="booking-table-card">
 
+            <div class="table-header">
+                <h3>Current Bookings</h3>
+            </div>
+
+            <table class="booking-table">
+
+                <thead>
+                    <tr>
+                        <th>Sl. No</th>
+                        <th>Booking ID</th>
+                        <th>Customer Name</th>
+                        <th>Customer Vehicle Type</th>
+                        <th>Customer Vehicle Model</th>
+                        <th>Requested Services</th>
+                        <th>Booking Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="bookingTableBody">
+                </tbody>
+
+            </table>
+
+            <div class="table-footer">
+                <p>*Sorted on last modified booking</p>
+                <p>**Completed / Cancelled bookings will not be shown here</p>
+            </div>
+
+        </div>
+
+        <br>
         <!-- Dashboard Cards -->
         <div class="dashboard-grid">
 

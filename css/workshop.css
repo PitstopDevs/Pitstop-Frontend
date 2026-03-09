@@ -101,3 +101,47 @@ body.dark-mode button {
   background-color: #333;
   color: white;
 }
+.booking-table-card {
+  margin-top: 25px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.booking-table th,
+.booking-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.booking-table th {
+  background: #f8f9fb;
+  font-weight: 600;
+}
+
+.view-btn {
+  background: #6cc070;
+  border: none;
+  padding: 6px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.view-btn:hover {
+  background: #4caf50;
+}
+
+.table-footer {
+  text-align: right;
+  font-size: 12px;
+  margin-top: 10px;
+  color: #555;
+}
