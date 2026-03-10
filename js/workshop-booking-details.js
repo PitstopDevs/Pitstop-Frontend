@@ -48,6 +48,10 @@ function renderBookingDetails(booking) {
   );
 
   document.getElementById("bdAmount").innerText = "₹ " + booking.amount;
+
+  if (booking.currentStatus !== "STARTED") {
+    document.getElementById("acceptBookingBtn").style.display = "none";
+  }
 }
 
 function formatEnum(value) {
@@ -57,4 +61,45 @@ function formatEnum(value) {
     .toLowerCase()
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+let currentBookingId = null;
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  currentBookingId = params.get("bookingId");
+
+  if (!currentBookingId) return;
+
+  loadBookingDetails(currentBookingId);
+
+  document
+    .getElementById("acceptBookingBtn")
+    .addEventListener("click", acceptBooking);
+});
+async function acceptBooking() {
+  if (!currentBookingId) return;
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/booking/acceptBooking/${currentBookingId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      },
+    );
+
+    if (!response.ok) {
+      alert("Failed to accept booking");
+      return;
+    }
+
+    alert("Booking accepted");
+
+    // reload booking details
+    loadBookingDetails(currentBookingId);
+  } catch (err) {
+    console.log("Accept booking failed");
+  }
 }

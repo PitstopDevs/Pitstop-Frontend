@@ -256,3 +256,21 @@ body.dark-mode button {
 .back-btn:hover {
   background: #e5e7eb;
 }
+.booking-actions {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.accept-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.accept-btn:hover {
+  background: #3f9a43;
+}

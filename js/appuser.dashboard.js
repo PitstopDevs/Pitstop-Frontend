@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   loadActiveBookings();
+  setInterval(loadActiveBookings, 10000);
 
   let username = localStorage.getItem("username") || "User";
 
