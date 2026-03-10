@@ -145,3 +145,114 @@ body.dark-mode button {
   margin-top: 10px;
   color: #555;
 }
+/* Page container */
+
+.booking-details-container {
+  max-width: 700px;
+  margin: 40px auto;
+}
+
+/* Main card */
+
+.booking-details-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+}
+
+/* Header */
+
+.booking-details-card h2 {
+  margin-bottom: 25px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Row layout */
+
+.booking-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Label */
+
+.booking-row span:first-child {
+  font-weight: 600;
+  color: #666;
+}
+
+/* Value */
+
+.booking-row span:last-child {
+  font-weight: 500;
+  color: #222;
+}
+
+/* Last row border fix */
+
+.booking-row:last-child {
+  border-bottom: none;
+}
+
+/* Status badge */
+
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Status colors */
+
+.status-STARTED {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status-BOOKED {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-ON_THE_WAY {
+  background: #e9d5ff;
+  color: #6b21a8;
+}
+
+.status-WAITING {
+  background: #fde68a;
+  color: #78350f;
+}
+
+.status-REPAIRING {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-COMPLETED {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* Back button */
+
+.back-btn {
+  margin-top: 20px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #f3f4f6;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background: #e5e7eb;
+}

@@ -129,7 +129,7 @@ function renderBookingTable(bookings) {
 
     row.innerHTML = `
       <td>${index + 1}</td>
-      <td>${booking.id}</td>
+      <td>${booking.id || "--"}</td>
       <td>${booking.customerName || "--"}</td>
       <td>${formatEnum(vehicle.vehicleType)}</td>
       <td>${vehicle.model || "--"}</td>
@@ -145,6 +145,7 @@ function renderBookingTable(bookings) {
     tbody.appendChild(row);
   });
 }
+
 function formatEnum(value) {
   if (!value) return "--";
 
@@ -152,4 +153,34 @@ function formatEnum(value) {
     .toLowerCase()
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+async function viewBooking(bookingId) {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/booking/view/${bookingId}`,
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      },
+    );
+
+    if (!response.ok) {
+      alert("Failed to load booking details");
+      return;
+    }
+
+    const booking = await response.json();
+
+    console.log("Booking details:", booking);
+
+    // Example: open a modal or another page
+    showBookingDetails(booking);
+  } catch (error) {
+    console.error("Error loading booking:", error);
+  }
+}
+function viewBooking(bookingId) {
+  window.location.href = `workshop-booking-details.html?bookingId=${bookingId}`;
 }
