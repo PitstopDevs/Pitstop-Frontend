@@ -12,6 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadActiveBookings();
   setInterval(loadActiveBookings, 10000);
+  const btn = document.getElementById("startJourneyBtn");
+
+  if (btn) {
+    btn.addEventListener("click", startJourney);
+  }
 
   let username = localStorage.getItem("username") || "User";
 
@@ -43,11 +48,14 @@ function goToRequestBooking() {
 
 async function loadActiveBookings() {
   try {
-    const response = await fetch("http://localhost:8080/api/booking/active", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
+    const response = await fetch(
+      "http://localhost:8080/api/booking/appUser/active",
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
       },
-    });
+    );
 
     if (!response.ok) return;
 
@@ -68,6 +76,11 @@ async function loadActiveBookings() {
 
 function renderBooking(booking) {
   const vehicle = booking.vehicleDetails || {};
+  if (booking.currentStatus === "BOOKED") {
+    journeyBtn.style.display = "inline-block";
+  } else {
+    journeyBtn.style.display = "none";
+  }
 
   document.getElementById("cbVehicle").innerText =
     (vehicle.brand || "") + " " + (vehicle.model || "");
@@ -132,3 +145,33 @@ function formatVehicleType(type) {
     .replace("_", " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
+async function startJourney() {
+  if (activeBookings.length === 0) return;
+
+  const bookingId = activeBookings[currentBookingIndex].id;
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/booking/startJourney/${bookingId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      },
+    );
+
+    if (!response.ok) {
+      alert("Failed to start journey");
+      return;
+    }
+
+    alert("Journey started");
+
+    // refresh booking card
+    loadActiveBookings();
+  } catch (err) {
+    console.log("Start journey failed");
+  }
+}
+const journeyBtn = document.getElementById("startJourneyBtn");

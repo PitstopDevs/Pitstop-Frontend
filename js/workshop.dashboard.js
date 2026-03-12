@@ -25,13 +25,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  loadWorkshopStatus();
-
   const toggle = document.getElementById("statusToggle");
   if (toggle) {
     toggle.addEventListener("change", toggleWorkshopStatus);
   }
   loadWorkshopBookings();
+  loadWorkshopStatus();
+  setInterval(loadWorkshopBookings, 10000);
 });
 function loadWorkshopStatus() {
   fetch("http://localhost:8080/api/workshops/getCurrentStatus", {
@@ -102,11 +102,14 @@ function logout() {
 }
 async function loadWorkshopBookings() {
   try {
-    const response = await fetch("http://localhost:8080/api/booking/check", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
+    const response = await fetch(
+      "http://localhost:8080/api/booking/workshopUser/active",
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
       },
-    });
+    );
 
     if (!response.ok) return;
 

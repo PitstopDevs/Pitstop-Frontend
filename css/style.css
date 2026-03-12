@@ -1191,3 +1191,21 @@ input:checked + .slider:before {
   background: #e5e7eb;
   color: #374151;
 }
+.booking-actions {
+  margin-top: 15px;
+  text-align: right;
+}
+
+.journey-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.journey-btn:hover {
+  background: #1d4ed8;
+}
