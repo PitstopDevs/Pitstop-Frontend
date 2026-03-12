@@ -1209,3 +1209,20 @@ input:checked + .slider:before {
 .journey-btn:hover {
   background: #1d4ed8;
 }
+.pay-btn {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pay-btn:hover {
+  background: #16a34a;
+}
+
+.booking-actions {
+  margin-top: 15px;
+}
