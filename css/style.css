@@ -1226,3 +1226,26 @@ input:checked + .slider:before {
 .booking-actions {
   margin-top: 15px;
 }
+.generateOtpBtn {
+  background: #2563eb;
+  color: rgb(194, 19, 19);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.generateOtpBtnn:hover {
+  background: #1d4ed8;
+}
+
+#otpSection {
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.otp-label {
+  margin-right: 6px;
+}
