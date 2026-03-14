@@ -48,6 +48,9 @@ function renderBookingDetails(booking) {
   );
 
   document.getElementById("bdAmount").innerText = "₹ " + booking.amount;
+  document.getElementById("bdPaymentStatus").innerText = formatEnum(
+    booking.paymentStatus,
+  );
 
   if (booking.currentStatus !== "STARTED") {
     document.getElementById("acceptBookingBtn").style.display = "none";

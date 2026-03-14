@@ -130,6 +130,11 @@ function renderBooking(booking) {
   } else {
     payBtn.style.display = "none";
   }
+  if (booking.paymentStatus === "NOT_PAID") {
+    payBtn.style.display = "block";
+  } else {
+    payBtn.style.display = "none";
+  }
 }
 
 function nextBooking() {
@@ -285,11 +290,4 @@ async function verifyPayment(response) {
   } catch (err) {
     console.error("Verification error:", err);
   }
-}
-const payBtn = document.getElementById("payNowBtn");
-
-if (booking.paymentStatus === "NOT_PAID") {
-  payBtn.style.display = "block";
-} else {
-  payBtn.style.display = "none";
 }
