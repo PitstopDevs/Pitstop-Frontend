@@ -1,3 +1,4 @@
+let selectedBookingId = null;
 document.addEventListener("DOMContentLoaded", function () {
   const token = localStorage.getItem("token");
 
@@ -159,6 +160,8 @@ function formatEnum(value) {
 }
 
 async function viewBooking(bookingId) {
+  selectedBookingId = bookingId;
+
   try {
     const response = await fetch(
       `http://localhost:8080/api/booking/view/${bookingId}`,
@@ -178,12 +181,79 @@ async function viewBooking(bookingId) {
 
     console.log("Booking details:", booking);
 
-    // Example: open a modal or another page
     showBookingDetails(booking);
+
+    // ⭐ THIS LINE IS MISSING IN YOUR CODE
+    document.getElementById("bookingModal").style.display = "block";
   } catch (error) {
     console.error("Error loading booking:", error);
   }
 }
-function viewBooking(bookingId) {
-  window.location.href = `workshop-booking-details.html?bookingId=${bookingId}`;
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.innerText = value;
 }
+
+function showBookingDetails(booking) {
+  const vehicle = booking.vehicleDetails || {};
+
+  setText("bdBookingId", booking.id);
+  setText("bdCustomer", booking.customerName || "--");
+
+  setText("bdVehicle", (vehicle.brand || "") + " " + (vehicle.model || ""));
+
+  setText("bdVehicleType", formatEnum(vehicle.vehicleType));
+  setText("bdEngine", vehicle.engineCapacity + " CC");
+
+  setText("bdService", formatEnum(booking.serviceType));
+  setText("bdStatus", formatEnum(booking.currentStatus));
+
+  setText("bdAmount", booking.amount);
+  setText("bdPayment", booking.paymentStatus);
+
+  setText(
+    "bdStarted",
+    booking.bookingStartedTime
+      ? new Date(booking.bookingStartedTime).toLocaleString()
+      : "--",
+  );
+
+  const acceptBtn = document.getElementById("acceptBookingBtn");
+
+  if (booking.currentStatus === "STARTED") {
+    acceptBtn.style.display = "inline-block";
+  } else {
+    acceptBtn.style.display = "none";
+  }
+}
+document.getElementById("acceptBookingBtn").onclick = async function () {
+  if (!selectedBookingId) return;
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/booking/acceptBooking/${selectedBookingId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      },
+    );
+
+    if (!response.ok) {
+      alert("Failed to accept booking");
+      return;
+    }
+
+    alert("Booking accepted");
+
+    document.getElementById("acceptBookingBtn").style.display = "none";
+
+    loadWorkshopBookings();
+  } catch (err) {
+    console.error(err);
+  }
+};
+document.getElementById("closeBookingModal").onclick = function () {
+  document.getElementById("bookingModal").style.display = "none";
+};

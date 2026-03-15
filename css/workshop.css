@@ -274,3 +274,76 @@ body.dark-mode button {
 .accept-btn:hover {
   background: #3f9a43;
 }
+.booking-modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.booking-modal-content {
+  background: white;
+  margin: 80px auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 600px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: modalSlide 0.25s ease;
+}
+
+@keyframes modalSlide {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.booking-close {
+  float: right;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.booking-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.booking-info-grid div {
+  display: flex;
+  flex-direction: column;
+}
+
+.booking-info-grid span {
+  margin-top: 4px;
+  color: #444;
+}
+
+.booking-actions {
+  margin-top: 25px;
+  text-align: right;
+}
+
+.accept-btn {
+  background: #16a34a;
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.accept-btn:hover {
+  background: #15803d;
+}
