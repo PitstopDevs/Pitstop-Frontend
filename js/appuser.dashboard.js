@@ -1,47 +1,52 @@
 let activeBookings = [];
 let currentBookingIndex = 0;
+let otpTimerInterval = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
 
-  // HARD GUARD
   if (!token) {
     window.location.href = "index.html";
     return;
   }
 
+  setupUserName();
+
+  attachEventListeners();
+
   loadActiveBookings();
-  setInterval(loadActiveBookings, 10000);
-  const btn = document.getElementById("startJourneyBtn");
 
-  if (btn) {
-    btn.addEventListener("click", startJourney);
-  }
+  // refresh bookings periodically
+  setInterval(loadActiveBookings, 30000);
+});
 
+function setupUserName() {
   let username = localStorage.getItem("username") || "User";
 
-  // Remove prefixes
   username = username.replace("appuser_", "").replace("workshop_", "");
 
-  // Capitalize
   username = username.charAt(0).toUpperCase() + username.slice(1);
 
   document.getElementById("userName").innerText = username;
+}
 
-  // Slider controls
+function attachEventListeners() {
   document.getElementById("nextBooking").onclick = nextBooking;
   document.getElementById("prevBooking").onclick = prevBooking;
+
+  const journeyBtn = document.getElementById("startJourneyBtn");
+  if (journeyBtn) journeyBtn.onclick = startJourney;
+
   const payBtn = document.getElementById("payNowBtn");
+  if (payBtn) payBtn.onclick = initiatePayment;
 
-  if (payBtn) {
-    payBtn.addEventListener("click", initiatePayment);
-  }
   const otpBtn = document.getElementById("generateOtpBtn");
+  if (otpBtn) otpBtn.onclick = generateBookingOtp;
 
-  if (otpBtn) {
-    otpBtn.addEventListener("click", generateBookingOtp);
-  }
-});
+  document.getElementById("regenOtpBtn").onclick = generateBookingOtp;
+
+  document.getElementById("copyOtpBtn").onclick = copyOtp;
+}
 
 function logout() {
   localStorage.clear();
@@ -73,10 +78,15 @@ async function loadActiveBookings() {
 
     if (!activeBookings || activeBookings.length === 0) {
       document.getElementById("currentBookingCard").style.display = "none";
+
       return;
     }
 
     document.getElementById("currentBookingCard").style.display = "block";
+
+    if (currentBookingIndex >= activeBookings.length) {
+      currentBookingIndex = 0;
+    }
 
     renderBooking(activeBookings[currentBookingIndex]);
   } catch (err) {
@@ -87,14 +97,9 @@ async function loadActiveBookings() {
 function renderBooking(booking) {
   const vehicle = booking.vehicleDetails || {};
 
-  const journeyBtn = document.getElementById("startJourneyBtn");
-  const payBtn = document.getElementById("payNowBtn");
-  const otpSection = document.getElementById("otpSection");
-  const otpValue = document.getElementById("bookingOtp");
-  const otpBtn = document.getElementById("generateOtpBtn");
+  resetOtpUI();
 
-  // ---------------- VEHICLE DETAILS ----------------
-
+  // vehicle details
   document.getElementById("cbVehicle").innerText =
     (vehicle.brand || "") + " " + (vehicle.model || "");
 
@@ -110,32 +115,33 @@ function renderBooking(booking) {
     ? booking.amount
     : "--";
 
-  document.getElementById("cbPayment").innerText =
-    booking.paymentStatus || "--";
+  document.getElementById("cbPayment").innerText = formatEnum(
+    booking.paymentStatus || "--",
+  );
 
   document.getElementById("cbStarted").innerText = booking.bookingStartedTime
     ? new Date(booking.bookingStartedTime).toLocaleString()
     : "--";
 
-  // ---------------- STATUS ----------------
-
+  // status
   const statusEl = document.getElementById("cbStatus");
+
   const status = booking.currentStatus || "--";
 
   statusEl.innerText = status.replaceAll("_", " ");
+
   statusEl.className = "booking-status status-" + status;
 
-  // ---------------- START JOURNEY BUTTON ----------------
+  // start journey button
+  const journeyBtn = document.getElementById("startJourneyBtn");
 
   if (journeyBtn) {
-    if (booking.currentStatus === "BOOKED") {
-      journeyBtn.style.display = "inline-block";
-    } else {
-      journeyBtn.style.display = "none";
-    }
+    journeyBtn.style.display =
+      booking.currentStatus === "BOOKED" ? "inline-block" : "none";
   }
 
-  // ---------------- PAYMENT BUTTON ----------------
+  // payment button
+  const payBtn = document.getElementById("payNowBtn");
 
   if (payBtn) {
     if (
@@ -149,44 +155,46 @@ function renderBooking(booking) {
     }
   }
 
-  // ---------------- OTP SECTION ----------------
-
-  if (!otpBtn || !otpSection) return;
+  // OTP logic
+  const otpBtn = document.getElementById("generateOtpBtn");
+  const otpCard = document.getElementById("otpCard");
+  const otpValue = document.getElementById("bookingOtp");
 
   if (booking.currentStatus === "ON_THE_WAY") {
-    // OTP already generated
     if (booking.otp && booking.otpExpiry) {
-      otpSection.style.display = "block";
-      otpValue.innerText = booking.otp;
+      otpCard.style.display = "block";
 
-      otpBtn.style.display = "none";
-    }
-    // OTP not generated yet
-    else {
-      otpSection.style.display = "none";
-      otpBtn.style.display = "inline-block";
-    }
-  } else {
-    otpBtn.style.display = "none";
-    otpSection.style.display = "none";
-  }
-  if (booking.currentStatus === "ON_THE_WAY") {
-    if (booking.otp && booking.otpExpiry) {
-      otpSection.style.display = "block";
       otpValue.innerText = booking.otp;
 
       otpBtn.style.display = "none";
 
       startOtpCountdown(booking.otpExpiry);
     } else {
-      otpSection.style.display = "none";
+      otpCard.style.display = "none";
+
       otpBtn.style.display = "inline-block";
     }
+  } else {
+    otpBtn.style.display = "none";
+
+    otpCard.style.display = "none";
   }
 
-  // ---------------- SLIDER COUNTER ----------------
-
   updateBookingCounter();
+}
+
+function resetOtpUI() {
+  const otpCard = document.getElementById("otpCard");
+  const otpValue = document.getElementById("bookingOtp");
+  const timer = document.getElementById("otpTimer");
+
+  if (otpTimerInterval) clearInterval(otpTimerInterval);
+
+  otpCard.style.display = "none";
+
+  otpValue.innerText = "------";
+
+  timer.innerText = "--:--";
 }
 
 function nextBooking() {
@@ -213,12 +221,14 @@ function updateBookingCounter() {
   counter.innerText =
     "Booking " + (currentBookingIndex + 1) + " of " + activeBookings.length;
 }
+
 function formatVehicleType(type) {
   return type
     .toLowerCase()
     .replace("_", " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
+
 async function startJourney() {
   if (activeBookings.length === 0) return;
 
@@ -237,18 +247,17 @@ async function startJourney() {
 
     if (!response.ok) {
       alert("Failed to start journey");
+
       return;
     }
 
     alert("Journey started");
 
-    // refresh booking card
     loadActiveBookings();
   } catch (err) {
     console.log("Start journey failed");
   }
 }
-const journeyBtn = document.getElementById("startJourneyBtn");
 
 async function initiatePayment() {
   if (activeBookings.length === 0) return;
@@ -269,8 +278,8 @@ async function initiatePayment() {
     const text = await response.text();
 
     if (!response.ok) {
-      console.error("Backend error:", text);
       alert("Payment initiation failed: " + text);
+
       return;
     }
 
@@ -279,9 +288,9 @@ async function initiatePayment() {
     openRazorpayCheckout(payment);
   } catch (err) {
     console.error("Payment initiation error:", err);
-    alert("Network error while initiating payment");
   }
 }
+
 function openRazorpayCheckout(payment) {
   const options = {
     key: payment.key,
@@ -309,6 +318,7 @@ function openRazorpayCheckout(payment) {
 
   rzp.open();
 }
+
 async function verifyPayment(response) {
   try {
     const verifyResponse = await fetch(
@@ -327,25 +337,17 @@ async function verifyPayment(response) {
       },
     );
 
-    if (!verifyResponse.ok) {
-      const err = await verifyResponse.text();
-      alert("Payment verification failed: " + err);
-      return;
-    }
-
     const result = await verifyResponse.json();
 
     alert(result.message);
 
-    // refresh booking card
     loadActiveBookings();
   } catch (err) {
     console.error("Verification error:", err);
   }
 }
-async function generateBookingOtp() {
-  if (activeBookings.length === 0) return;
 
+async function generateBookingOtp() {
   const bookingId = activeBookings[currentBookingIndex].id;
 
   try {
@@ -359,55 +361,69 @@ async function generateBookingOtp() {
       },
     );
 
-    // HANDLE BACKEND ERROR MESSAGE
     if (!response.ok) {
-      const errorMessage = await response.text();
+      const msg = await response.text();
 
-      alert(errorMessage); // shows: OTP already generated and still valid
+      alert(msg);
 
       return;
     }
 
-    const data = await response.json();
-
-    document.getElementById("otpSection").style.display = "block";
-    document.getElementById("bookingOtp").innerText = data.otp;
+    await loadActiveBookings();
   } catch (err) {
     console.error("OTP generation failed", err);
-
-    alert("Something went wrong while generating OTP");
   }
 }
-let otpTimerInterval = null;
 
 function startOtpCountdown(expiryTime) {
-  if (otpTimerInterval) {
-    clearInterval(otpTimerInterval);
-  }
+  const timerEl = document.getElementById("otpTimer");
+  const regenBtn = document.getElementById("regenOtpBtn");
 
-  const timerElement = document.getElementById("otpTimer");
+  if (otpTimerInterval) clearInterval(otpTimerInterval);
+
+  const expiry = new Date(expiryTime).getTime();
 
   otpTimerInterval = setInterval(() => {
-    const expiry = new Date(expiryTime).getTime();
     const now = new Date().getTime();
 
-    const remaining = expiry - now;
+    const diff = expiry - now;
 
-    if (remaining <= 0) {
+    if (diff <= 0) {
       clearInterval(otpTimerInterval);
 
-      timerElement.innerText = "Expired";
+      timerEl.innerText = "Expired";
 
-      document.getElementById("generateOtpBtn").style.display = "inline-block";
-      document.getElementById("otpSection").style.display = "none";
+      regenBtn.style.display = "inline-block";
 
       return;
     }
 
-    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
 
-    timerElement.innerText =
+    timerEl.innerText =
       String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
   }, 1000);
+}
+
+function copyOtp() {
+  const otp = document.getElementById("bookingOtp").innerText;
+
+  navigator.clipboard.writeText(otp);
+
+  const btn = document.getElementById("copyOtpBtn");
+
+  btn.innerText = "Copied";
+
+  setTimeout(() => {
+    btn.innerText = "Copy";
+  }, 1500);
+}
+function formatEnum(value) {
+  if (!value) return "--";
+
+  return value
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }

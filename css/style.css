@@ -1097,15 +1097,17 @@ input:checked + .slider:before {
 }
 
 .booking-details {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  margin-top: 12px;
 }
 
 .booking-row {
   display: flex;
   justify-content: space-between;
   margin: 6px 0;
+  font-size: 14px;
+}
+.booking-row .label {
+  color: #64748b;
 }
 
 .label {
@@ -1133,17 +1135,11 @@ input:checked + .slider:before {
   color: #777;
 }
 .active-booking-card {
-  width: 480px;
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 20px 24px;
-  border: 1px solid #e8e8e8;
-
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  width: 340px;
+  padding: 22px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .active-booking-card:hover {
@@ -1226,26 +1222,74 @@ input:checked + .slider:before {
 .booking-actions {
   margin-top: 15px;
 }
-.generateOtpBtn {
-  background: #2563eb;
-  color: rgb(194, 19, 19);
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 10px;
+.otp-container {
+  margin-top: 20px;
 }
 
-.generateOtpBtnn:hover {
+.otp-generate-btn {
+  padding: 10px 18px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.otp-generate-btn:hover {
   background: #1d4ed8;
 }
 
-#otpSection {
-  margin-top: 10px;
-  font-weight: 600;
-  font-size: 18px;
+.otp-card {
+  margin-top: 15px;
+  padding: 18px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
 }
 
-.otp-label {
-  margin-right: 6px;
+.otp-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.otp-value {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #2563eb;
+  margin-bottom: 8px;
+}
+
+.otp-expiry {
+  font-size: 12px;
+  color: #ef4444;
+  margin-bottom: 10px;
+}
+
+.otp-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.otp-copy-btn {
+  padding: 6px 12px;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.otp-regenerate-btn {
+  padding: 6px 12px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }

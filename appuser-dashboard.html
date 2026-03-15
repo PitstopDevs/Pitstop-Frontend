@@ -69,13 +69,40 @@
                             Pay Now
                         </button>
                     </div>
-                    <button id="generateOtpBtn">Generate OTP</button>
+                    <div class="otp-container">
 
-                    <div id="otpSection" style="display:none;">
-                        OTP: <span id="bookingOtp"></span>
-                    </div>
-                    <div class="otp-expiry">
-                        Expires in <span id="otpTimer"></span>
+                        <button id="generateOtpBtn" class="otp-generate-btn">
+                            Generate OTP
+                        </button>
+
+                        <div id="otpCard" class="otp-card" style="display:none">
+
+                            <div class="otp-header">
+                                Service Verification Code
+                            </div>
+
+                            <div id="bookingOtp" class="otp-value">
+                                ------
+                            </div>
+
+                            <div class="otp-expiry">
+                                Expires in : <span id="otpTimer">--:--</span>
+                            </div>
+
+                            <div class="otp-actions">
+
+                                <button id="copyOtpBtn" class="otp-copy-btn">
+                                    Copy
+                                </button>
+
+                                <button id="regenOtpBtn" class="otp-regenerate-btn" style="display:none">
+                                    Regenerate OTP
+                                </button>
+
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
 
