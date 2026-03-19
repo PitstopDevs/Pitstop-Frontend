@@ -347,3 +347,28 @@ body.dark-mode button {
 .accept-btn:hover {
   background: #15803d;
 }
+.otp-verification-section {
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.otp-input {
+  padding: 8px;
+  font-size: 16px;
+  width: 150px;
+  margin-right: 10px;
+}
+
+.verify-otp-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.verify-otp-btn:hover {
+  background: #1e40af;
+}

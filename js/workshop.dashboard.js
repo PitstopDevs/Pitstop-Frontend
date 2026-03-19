@@ -1,4 +1,5 @@
 let selectedBookingId = null;
+let currentBooking = null;
 document.addEventListener("DOMContentLoaded", function () {
   const token = localStorage.getItem("token");
 
@@ -162,32 +163,22 @@ function formatEnum(value) {
 async function viewBooking(bookingId) {
   selectedBookingId = bookingId;
 
-  try {
-    const response = await fetch(
-      `http://localhost:8080/api/booking/view/${bookingId}`,
-      {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
+  const response = await fetch(
+    `http://localhost:8080/api/booking/view/${bookingId}`,
+    {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
-    );
+    },
+  );
 
-    if (!response.ok) {
-      alert("Failed to load booking details");
-      return;
-    }
+  const booking = await response.json();
 
-    const booking = await response.json();
+  currentBooking = booking;
 
-    console.log("Booking details:", booking);
+  showBookingDetails(booking);
 
-    showBookingDetails(booking);
-
-    // ⭐ THIS LINE IS MISSING IN YOUR CODE
-    document.getElementById("bookingModal").style.display = "block";
-  } catch (error) {
-    console.error("Error loading booking:", error);
-  }
+  document.getElementById("bookingModal").style.display = "block";
 }
 function setText(id, value) {
   const el = document.getElementById(id);
@@ -225,6 +216,17 @@ function showBookingDetails(booking) {
   } else {
     acceptBtn.style.display = "none";
   }
+  const otpSection = document.getElementById("otpVerificationSection");
+
+  if (
+    booking.currentStatus === "ON_THE_WAY" ||
+    booking.currentStatus === "WAITING" ||
+    booking.currentStatus === "REPAIRING"
+  ) {
+    otpSection.style.display = "block";
+  } else {
+    otpSection.style.display = "none";
+  }
 }
 document.getElementById("acceptBookingBtn").onclick = async function () {
   if (!selectedBookingId) return;
@@ -257,3 +259,65 @@ document.getElementById("acceptBookingBtn").onclick = async function () {
 document.getElementById("closeBookingModal").onclick = function () {
   document.getElementById("bookingModal").style.display = "none";
 };
+document.getElementById("verifyOtpBtn").onclick = verifyOtp;
+
+async function verifyOtp() {
+  const otp = document.getElementById("otpInput").value;
+
+  if (!otp) {
+    alert("Enter OTP");
+    return;
+  }
+
+  const currentStatus = currentBooking.currentStatus;
+
+  let endpoint = "";
+
+  if (currentStatus === "ON_THE_WAY") {
+    endpoint = "/api/booking/verifyOtpAndSetWaiting";
+  } else if (currentStatus === "WAITING") {
+    endpoint = "/api/booking/verifyOtpAndSetRepairing";
+  } else if (currentStatus === "REPAIRING") {
+    endpoint = "/api/booking/verifyOtpAndSetCompleted";
+  } else {
+    alert("OTP verification not allowed in this state");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:8080" + endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        id: selectedBookingId,
+        otp: otp,
+      }),
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      alert(err);
+      return;
+    }
+
+    alert("Status updated successfully");
+
+    document.getElementById("bookingModal").style.display = "none";
+
+    loadWorkshopBookings();
+  } catch (err) {
+    console.error("OTP verification failed", err);
+  }
+}
+const verifyBtn = document.getElementById("verifyOtpBtn");
+
+if (booking.currentStatus === "ON_THE_WAY") {
+  verifyBtn.innerText = "Verify OTP & Set Waiting";
+} else if (booking.currentStatus === "WAITING") {
+  verifyBtn.innerText = "Verify OTP & Start Repair";
+} else if (booking.currentStatus === "REPAIRING") {
+  verifyBtn.innerText = "Verify OTP & Complete Job";
+}

@@ -160,7 +160,11 @@ function renderBooking(booking) {
   const otpCard = document.getElementById("otpCard");
   const otpValue = document.getElementById("bookingOtp");
 
-  if (booking.currentStatus === "ON_THE_WAY") {
+  if (
+    booking.currentStatus === "ON_THE_WAY" ||
+    booking.currentStatus === "WAITING" ||
+    booking.currentStatus === "REPAIRING"
+  ) {
     if (booking.otp && booking.otpExpiry) {
       otpCard.style.display = "block";
 
